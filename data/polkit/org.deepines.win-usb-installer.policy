@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>Deepines</vendor>
+  <vendor_url>https://github.com/igatjens/deepines-win-usb-installer</vendor_url>
+  <icon_name>deepines-win-usb-installer</icon_name>
+
+  <action id="org.deepines.win-usb-installer.write">
+    <description>Create a Windows USB installer</description>
+    <description xml:lang="es">Crear un instalador USB de Windows</description>
+    <message>Authentication is required to erase the USB drive and write the Windows installer</message>
+    <message xml:lang="es">Se requiere autenticación para borrar la unidad USB y grabar el instalador de Windows</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/deepines-win-usb-installer</annotate>
+  </action>
+</policyconfig>

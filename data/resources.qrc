@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="deepines-win-usb-installer.svg">icons/deepines-win-usb-installer.svg</file>
+    </qresource>
+</RCC>
