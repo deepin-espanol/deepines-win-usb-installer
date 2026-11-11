@@ -1,0 +1,9 @@
+deepines-win-usb-installer (1.0.0) stable; urgency=medium
+
+  * Reescrito en C++ con Qt6 y DTK6: interfaz gráfica en lugar de terminal.
+  * Operaciones privilegiadas mediante pkexec/polkit en lugar de sudo.
+  * Particionado con sfdisk (util-linux) en lugar de sgdisk.
+  * Validación de la ISO de Windows antes de borrar la unidad.
+  * Progreso real de la copia y posibilidad de cancelar.
+
+ -- Isaías Gätjens M <igatjens@gmail.com>  Fri, 20 Nov 2026 12:00:00 -0600

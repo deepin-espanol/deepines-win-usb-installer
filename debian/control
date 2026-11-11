@@ -1,0 +1,27 @@
+Source: deepines-win-usb-installer
+Section: utils
+Priority: optional
+Maintainer: Isaías Gätjens M <igatjens@gmail.com>
+Build-Depends: debhelper-compat (= 13),
+               cmake,
+               qt6-base-dev,
+               libdtk6core-dev,
+               libdtk6gui-dev,
+               libdtk6widget-dev
+Standards-Version: 4.6.2
+Homepage: https://github.com/igatjens/deepines-win-usb-installer
+Rules-Requires-Root: no
+
+Package: deepines-win-usb-installer
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         util-linux (>= 2.37),
+         dosfstools,
+         exfatprogs | exfat-utils,
+         pkexec | policykit-1,
+         udev
+Recommends: udisks2, parted
+Description: Instalador USB de Windows 10/11
+ Herramienta gráfica (Qt6/DTK6) para crear una memoria USB de instalación
+ de Windows 10/11 a partir del archivo .iso oficial. Compatible únicamente
+ con UEFI y Secure Boot.
