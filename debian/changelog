@@ -1,4 +1,4 @@
-deepines-win-usb-installer (1.0.0) stable; urgency=medium
+deepines-win-usb-installer (0.3-1+deepines) stable; urgency=medium
 
   * Reescrito en C++ con Qt6 y DTK6: interfaz gráfica en lugar de terminal.
   * Operaciones privilegiadas mediante pkexec/polkit en lugar de sudo.

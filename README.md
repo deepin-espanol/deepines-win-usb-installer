@@ -1,4 +1,12 @@
-# deepines-win-usb-installer
+<p align="center">
+  <img src="data/icons/deepines-win-usb-installer.svg" alt="Logo de deepines-win-usb-installer" width="128">
+</p>
+
+<h1 align="center">deepines-win-usb-installer</h1>
+
+<p align="center">
+  Un proyecto de la comunidad <a href="https://deepinenespañol.org">Deepin en Español</a>
+</p>
 
 Creador de memorias USB de instalación de Windows 10/11 para equipos **UEFI**
 (compatible con Secure Boot), escrito en C++ con **Qt6** y **DTK6**.
@@ -32,6 +40,7 @@ src/
 data/
   applications/       Lanzador .desktop
   icons/              Icono de la aplicación
+  images/             Logo de Deepin en Español (diálogo «Acerca de»)
   polkit/             Política de pkexec
   resources.qrc       Recursos embebidos
 debian/               Empaquetado .deb

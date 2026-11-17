@@ -2,4 +2,7 @@
     <qresource prefix="/icons">
         <file alias="deepines-win-usb-installer.svg">icons/deepines-win-usb-installer.svg</file>
     </qresource>
+    <qresource prefix="/images">
+        <file alias="Logo-Racoon.png">images/Logo-Racoon.png</file>
+    </qresource>
 </RCC>

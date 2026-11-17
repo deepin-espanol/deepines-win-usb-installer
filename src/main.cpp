@@ -3,9 +3,13 @@
 #include "helper/helper.h"
 #include "gui/mainwindow.h"
 
+#include <DAboutDialog>
 #include <DApplication>
 #include <DGuiApplicationHelper>
 #include <DWidgetUtil>
+
+#include <QLabel>
+#include <QPixmap>
 
 #include <cstring>
 
@@ -39,6 +43,39 @@ int main(int argc, char *argv[])
         return 0;
 
     MainWindow window;
+
+    // Diálogo «Acerca de» con el logo y la web de la comunidad Deepin en Español
+    auto *about = new DAboutDialog(&window);
+    about->setWindowTitle(app.productName());
+    about->setProductIcon(icon);
+    about->setProductName(app.productName());
+    about->setVersion(app.applicationVersion());
+    about->setDescription(
+        app.applicationDescription() +
+        QStringLiteral("<br/><br/>"
+                       "<span style='font-size:8pt; font-weight:600;'>Deepin en Español</span><br/>"
+                       "<span style='font-size:8pt; font-weight:600;'>Deepin Latin Code - developers</span>"));
+    about->setLicense(QObject::tr("Licencia: %1").arg(app.applicationLicense()));
+    about->setWebsiteName(QStringLiteral("deepinenespañol.org"));
+    about->setWebsiteLink(QStringLiteral("https://deepinenespañol.org"));
+
+    // Logo de la comunidad bajo el nombre de la app. DTK oculta siempre la etiqueta
+    // del logo de empresa y fija el diálogo en 540x290, así que se muestra a mano y
+    // se agranda el diálogo para que quepa.
+    const qreal dpr = window.devicePixelRatioF();
+    QPixmap logo = QPixmap(QStringLiteral(":/images/Logo-Racoon.png"))
+                       .scaledToWidth(qRound(150 * dpr), Qt::SmoothTransformation);
+    logo.setDevicePixelRatio(dpr);
+    about->setCompanyLogo(logo);
+    for (QLabel *label : about->findChildren<QLabel *>()) {
+        if (label->pixmap().cacheKey() == logo.cacheKey()) {
+            label->setAlignment(Qt::AlignCenter);
+            label->show();
+        }
+    }
+    about->setFixedSize(540, 400);
+    app.setAboutDialog(about);
+
     window.show();
     Dtk::Widget::moveToCenter(&window);
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance,
