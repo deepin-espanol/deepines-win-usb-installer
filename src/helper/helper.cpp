@@ -2,6 +2,7 @@
 #include "helper/helper.h"
 
 #include "core/common.h"
+#include "core/i18n.h"
 #include "core/usbdevices.h"
 
 #include <QCoreApplication>
@@ -73,7 +74,7 @@ RunResult run(const QString &program, const QStringList &args, const QByteArray 
     p.setProcessChannelMode(QProcess::MergedChannels);
     p.start(program, args);
     if (!p.waitForStarted())
-        return {-1, QStringLiteral("%1: no se pudo ejecutar").arg(program)};
+        return {-1, QCoreApplication::translate("Helper", "%1: no se pudo ejecutar").arg(program)};
     if (!input.isEmpty())
         p.write(input);
     p.closeWriteChannel();
@@ -110,7 +111,7 @@ void unmountAll(const QString &disk)
         QThread::msleep(500);
     }
     if (!UsbDevices::mountPoints(disk).isEmpty())
-        fail(QStringLiteral("No se pudo desmontar %1. Cierre los programas que estén usando la unidad.").arg(disk));
+        fail(QCoreApplication::translate("Helper", "No se pudo desmontar %1. Cierre los programas que estén usando la unidad.").arg(disk));
 }
 
 struct Mounts
@@ -132,7 +133,7 @@ struct Mounts
             QThread::msleep(1000);
             settle();
         }
-        fail(QStringLiteral("No se pudo montar %1\n%2").arg(device, r.output));
+        fail(QCoreApplication::translate("Helper", "No se pudo montar %1\n%2").arg(device, r.output));
     }
 
     void unmountAll()
@@ -189,9 +190,9 @@ private:
         QFile in(job.source);
         QFile out(job.dest);
         if (!in.open(QIODevice::ReadOnly))
-            fail(QStringLiteral("No se pudo leer %1: %2").arg(job.source, in.errorString()));
+            fail(QCoreApplication::translate("Helper", "No se pudo leer %1: %2").arg(job.source, in.errorString()));
         if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
-            fail(QStringLiteral("No se pudo escribir %1: %2").arg(job.dest, out.errorString()));
+            fail(QCoreApplication::translate("Helper", "No se pudo escribir %1: %2").arg(job.dest, out.errorString()));
 
         constexpr qint64 chunk = 4 * MiB;
         constexpr qint64 syncEvery = 64 * MiB;
@@ -201,11 +202,11 @@ private:
             checkCancel();
             const qint64 n = in.read(buffer.data(), chunk);
             if (n < 0)
-                fail(QStringLiteral("Error al leer %1: %2").arg(job.source, in.errorString()));
+                fail(QCoreApplication::translate("Helper", "Error al leer %1: %2").arg(job.source, in.errorString()));
             if (n == 0)
                 break;
             if (out.write(buffer.constData(), n) != n)
-                fail(QStringLiteral("Error al escribir %1: %2").arg(job.dest, out.errorString()));
+                fail(QCoreApplication::translate("Helper", "Error al escribir %1: %2").arg(job.dest, out.errorString()));
             m_done += n;
             unsynced += n;
             // Forzar la escritura periódicamente para que el progreso refleje
@@ -222,7 +223,7 @@ private:
         }
         out.flush();
         if (::fdatasync(out.handle()) != 0)
-            fail(QStringLiteral("Error al escribir %1").arg(job.dest));
+            fail(QCoreApplication::translate("Helper", "Error al escribir %1").arg(job.dest));
     }
 
     QList<CopyJob> m_jobs;
@@ -265,18 +266,18 @@ void work(const QString &isoPath, const QString &disk)
     step(Step::CheckIso);
     const QFileInfo isoInfo(isoPath);
     if (!isoInfo.isFile())
-        fail(QStringLiteral("El archivo «%1» no existe").arg(isoPath));
+        fail(QCoreApplication::translate("Helper", "El archivo «%1» no existe").arg(isoPath));
 
     const UsbDevice dev = UsbDevices::find(disk);
     if (dev.path.isEmpty())
-        fail(QStringLiteral("%1 no es una unidad de almacenamiento USB").arg(disk));
+        fail(QCoreApplication::translate("Helper", "%1 no es una unidad de almacenamiento USB").arg(disk));
     if (dev.size <= requiredBytes(isoInfo.size()))
-        fail(QStringLiteral("La unidad es de %1 y se necesitan al menos %2")
+        fail(QCoreApplication::translate("Helper", "La unidad es de %1 y se necesitan al menos %2")
                  .arg(UsbDevices::formatSize(dev.size), UsbDevices::formatSize(requiredBytes(isoInfo.size()))));
 
     QTemporaryDir work(QStringLiteral("/var/tmp/deepines-win-usb-installer-XXXXXX"));
     if (!work.isValid())
-        fail(QStringLiteral("No se pudo crear la carpeta de trabajo"));
+        fail(QCoreApplication::translate("Helper", "No se pudo crear la carpeta de trabajo"));
     // Nunca borrar recursivamente: si algo siguiera montado se borrarían sus archivos.
     work.setAutoRemove(false);
     struct DirCleanup
@@ -304,7 +305,7 @@ void work(const QString &isoPath, const QString &disk)
         || !findCi(isoDir, QStringLiteral("sources/install.esd")).isEmpty()
         || !findCi(isoDir, QStringLiteral("sources/install.swm")).isEmpty();
     if (bootWim.isEmpty() || !hasInstall || findCi(isoDir, QStringLiteral("efi")).isEmpty())
-        fail(QStringLiteral("«%1» no parece ser una ISO del instalador de Windows compatible con UEFI").arg(isoInfo.fileName()));
+        fail(QCoreApplication::translate("Helper", "«%1» no parece ser una ISO del instalador de Windows compatible con UEFI").arg(isoInfo.fileName()));
     checkCancel();
 
     // ---- Particionado ----
@@ -324,7 +325,7 @@ void work(const QString &isoPath, const QString &disk)
     runOrFail(QStringLiteral("sfdisk"),
               {QStringLiteral("--wipe"), QStringLiteral("always"), QStringLiteral("--wipe-partitions"),
                QStringLiteral("always"), disk},
-              QStringLiteral("No se pudo crear la tabla de particiones en %1").arg(disk), layout);
+              QCoreApplication::translate("Helper", "No se pudo crear la tabla de particiones en %1").arg(disk), layout);
     settle();
 
     QStringList parts;
@@ -337,17 +338,17 @@ void work(const QString &isoPath, const QString &disk)
         parts = UsbDevices::partitions(disk);
     }
     if (parts.size() != 2)
-        fail(QStringLiteral("El sistema no detectó las nuevas particiones de %1").arg(disk));
+        fail(QCoreApplication::translate("Helper", "El sistema no detectó las nuevas particiones de %1").arg(disk));
     checkCancel();
 
     // ---- Formateo ----
     step(Step::Format);
     unmountAll(disk);
     runOrFail(QStringLiteral("mkfs.vfat"), {QStringLiteral("-F"), QStringLiteral("32"), QStringLiteral("-n"), EfiLabel, parts[0]},
-              QStringLiteral("No se pudo formatear %1").arg(parts[0]));
+              QCoreApplication::translate("Helper", "No se pudo formatear %1").arg(parts[0]));
     unmountAll(disk);
     runOrFail(QStringLiteral("mkfs.exfat"), {mkfsExfatLabelFlag(), InstallLabel, parts[1]},
-              QStringLiteral("No se pudo formatear %1").arg(parts[1]));
+              QCoreApplication::translate("Helper", "No se pudo formatear %1").arg(parts[1]));
     settle();
     checkCancel();
 
@@ -395,12 +396,19 @@ int runHelper(int argc, char *argv[])
 
     const QStringList args = app.arguments();
     const int idx = int(args.indexOf(HelperArg));
+    // Idioma de la interfaz (argumento opcional tras el dispositivo): pkexec no
+    // conserva LANG, así que lo envía la propia interfaz.
+    installAppTranslator(idx >= 0 && args.size() > idx + 3 ? args.at(idx + 3)
+                                                             : QLocale::system().name());
     if (idx < 0 || args.size() < idx + 3) {
-        emitLine(QStringLiteral("ERROR Uso: %1 --helper <archivo.iso> <dispositivo>").arg(args.value(0)));
+        emitLine(QStringLiteral("ERROR ")
+                 + QCoreApplication::translate("Helper", "Uso: %1 --helper <archivo.iso> <dispositivo> [idioma]")
+                       .arg(args.value(0)));
         return 2;
     }
     if (::geteuid() != 0) {
-        emitLine(QStringLiteral("ERROR Se requieren permisos de administrador"));
+        emitLine(QStringLiteral("ERROR ")
+                 + QCoreApplication::translate("Helper", "Se requieren permisos de administrador"));
         return 2;
     }
 

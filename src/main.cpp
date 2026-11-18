@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "core/common.h"
+#include "core/i18n.h"
 #include "helper/helper.h"
 #include "gui/mainwindow.h"
 
@@ -27,6 +28,9 @@ int main(int argc, char *argv[])
     app.setOrganizationName(QStringLiteral("deepines"));
     app.setApplicationName(QStringLiteral("deepines-win-usb-installer"));
     app.setApplicationVersion(QStringLiteral(APP_VERSION));
+    // Traducciones de DTK y de la aplicación, antes de cualquier tr()
+    app.loadTranslator();
+    WinUsb::installAppTranslator();
     app.setApplicationDisplayName(QObject::tr("Instalador USB de Windows"));
     app.setProductName(QObject::tr("Instalador USB de Windows"));
     const QIcon icon = QIcon::fromTheme(QStringLiteral("deepines-win-usb-installer"),
@@ -37,7 +41,6 @@ int main(int argc, char *argv[])
                                               "para equipos UEFI a partir del archivo .iso oficial."));
     app.setApplicationHomePage(QStringLiteral("https://github.com/igatjens/deepines-win-usb-installer"));
     app.setApplicationLicense(QStringLiteral("GPL-3.0-or-later"));
-    app.loadTranslator();
 
     if (!DGuiApplicationHelper::setSingleInstance(app.applicationName()))
         return 0;

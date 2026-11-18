@@ -37,6 +37,7 @@ src/
   core/               Constantes y detección de unidades USB (lsblk)
   helper/             Modo privilegiado: particionado, formateo y copia
   gui/                Ventana principal DTK
+  translations/       Traducciones (.ts) al inglés y al español
 data/
   applications/       Lanzador .desktop
   icons/              Icono de la aplicación
@@ -51,7 +52,8 @@ debian/               Empaquetado .deb
 Dependencias (Deepin 23/25):
 
 ```sh
-sudo apt install cmake g++ qt6-base-dev libdtk6core-dev libdtk6gui-dev libdtk6widget-dev
+sudo apt install cmake g++ qt6-base-dev libdtk6core-dev libdtk6gui-dev libdtk6widget-dev \
+    qt6-l10n-tools qt6-tools-dev-tools
 ```
 
 ```sh
@@ -68,3 +70,15 @@ dpkg-buildpackage -us -uc -b
 
 Dependencias en tiempo de ejecución: `util-linux` (sfdisk, wipefs, lsblk,
 mount), `dosfstools`, `exfatprogs`, `pkexec`, `udev`.
+
+## Traducciones
+
+Los textos originales del código están en español. Las traducciones están en
+`src/translations/` y se compilan dentro del ejecutable; si no existe traducción
+para el idioma del sistema, la aplicación se muestra en inglés.
+
+Para actualizar los `.ts` después de cambiar textos:
+
+```sh
+/usr/lib/qt6/bin/lupdate -no-obsolete -locations none src -ts src/translations/*.ts
+```

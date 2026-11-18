@@ -5,5 +5,6 @@ deepines-win-usb-installer (0.3-1+deepines) stable; urgency=medium
   * Particionado con sfdisk (util-linux) en lugar de sgdisk.
   * Validación de la ISO de Windows antes de borrar la unidad.
   * Progreso real de la copia y posibilidad de cancelar.
+  * Interfaz traducida al inglés y al español (i18n con Qt Linguist).
 
  -- Isaías Gätjens M <igatjens@gmail.com>  Fri, 20 Nov 2026 12:00:00 -0600

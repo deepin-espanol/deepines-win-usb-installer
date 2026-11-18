@@ -27,6 +27,7 @@
 #include <QFontDatabase>
 #include <QDir>
 #include <QHBoxLayout>
+#include <QLocale>
 #include <QMimeData>
 #include <QPlainTextEdit>
 #include <QStackedWidget>
@@ -506,7 +507,10 @@ void MainWindow::startWriting()
             helperFinished(-1, QProcess::CrashExit);
     });
 
-    const QStringList args{QCoreApplication::applicationFilePath(), HelperArg, iso, device};
+    // pkexec limpia el entorno (LANG, LANGUAGE…), así que el idioma se pasa
+    // como argumento para que los mensajes del helper salgan traducidos.
+    const QStringList args{QCoreApplication::applicationFilePath(), HelperArg, iso, device,
+                           QLocale::system().name()};
     appendLog(QStringLiteral("pkexec ") + args.join(QLatin1Char(' ')));
     m_helper->start(QStringLiteral("pkexec"), args);
 }
