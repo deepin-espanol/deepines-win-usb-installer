@@ -82,3 +82,8 @@ Para actualizar los `.ts` después de cambiar textos:
 ```sh
 /usr/lib/qt6/bin/lupdate -no-obsolete -locations none src -ts src/translations/*.ts
 ```
+
+## Proyecto original
+
+Basado en [deepines-win-usb-installer](https://github.com/igatjens/deepines-win-usb-installer),
+creado por [Isaías Gätjens M](https://github.com/igatjens).
