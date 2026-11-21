@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: deepines-win-usb-installer
-Source: https://github.com/igatjens/deepines-win-usb-installer
+Source: https://github.com/deepin-espanol/deepines-win-usb-installer
 
 Files: *
 Copyright: 2020-2026 Isaías Gätjens M <igatjens@gmail.com>

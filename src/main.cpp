@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     app.setWindowIcon(icon);
     app.setApplicationDescription(QObject::tr("Crea una memoria USB de instalación de Windows 10/11 "
                                               "para equipos UEFI a partir del archivo .iso oficial."));
-    app.setApplicationHomePage(QStringLiteral("https://github.com/igatjens/deepines-win-usb-installer"));
+    app.setApplicationHomePage(QStringLiteral("https://github.com/deepin-espanol/deepines-win-usb-installer"));
     app.setApplicationLicense(QStringLiteral("GPL-3.0-or-later"));
 
     if (!DGuiApplicationHelper::setSingleInstance(app.applicationName()))

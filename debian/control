@@ -1,7 +1,7 @@
 Source: deepines-win-usb-installer
 Section: utils
 Priority: optional
-Maintainer: Isaías Gätjens M <igatjens@gmail.com>
+Maintainer: Alvaro Samudio <alvarosamudio@protonmail.com>
 Build-Depends: debhelper-compat (= 13),
                cmake,
                qt6-base-dev,
@@ -11,7 +11,7 @@ Build-Depends: debhelper-compat (= 13),
                qt6-l10n-tools,
                qt6-tools-dev-tools
 Standards-Version: 4.6.2
-Homepage: https://github.com/igatjens/deepines-win-usb-installer
+Homepage: https://github.com/deepin-espanol/deepines-win-usb-installer
 Rules-Requires-Root: no
 
 Package: deepines-win-usb-installer
